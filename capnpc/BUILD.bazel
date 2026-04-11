@@ -1,0 +1,38 @@
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(["Cargo.toml"])
+
+rust_library(
+    name = "capnpc",
+    srcs = glob(
+        ["src/**/*.rs"],
+        exclude = [
+            "src/capnpc-rust.rs",
+            "src/capnpc-rust-bootstrap.rs",
+        ],
+    ),
+    crate_name = "capnpc",
+    edition = "2021",
+    version = "0.25.0",
+    deps = ["@crates//:capnp"],
+)
+
+rust_binary(
+    name = "capnpc-rust",
+    srcs = ["src/capnpc-rust.rs"],
+    crate_name = "capnpc_rust",
+    edition = "2021",
+    version = "0.25.0",
+    deps = [":capnpc"],
+)
+
+rust_binary(
+    name = "capnpc-rust-bootstrap",
+    srcs = ["src/capnpc-rust-bootstrap.rs"],
+    crate_name = "capnpc_rust_bootstrap",
+    edition = "2021",
+    version = "0.25.0",
+    deps = [":capnpc"],
+)
